@@ -7,6 +7,7 @@ import {
   POOLS_MAP,
   PoolName,
   PoolTypes,
+  STABLECOIN_CROSS_POOL_NAME,
   STABLECOIN_POOL_NAME,
   STABLECOIN_POOL_V2_NAME,
   SUSD_METAPOOL_NAME,
@@ -37,6 +38,9 @@ function Pools(): ReactElement | null {
   const [btcPoolV2Data, btcV2UsersShareData] = usePoolData(BTC_POOL_V2_NAME)
   const [usdPoolV2Data, usdV2UserShareData] = usePoolData(
     STABLECOIN_POOL_V2_NAME,
+  )
+  const [usdPoolV3Data, usdV3UserShareData] = usePoolData(
+    STABLECOIN_CROSS_POOL_NAME,
   )
   const [usdPoolData, usdUserShareData] = usePoolData(STABLECOIN_POOL_NAME)
   const [susdPoolData, susdUserShareData] = usePoolData(SUSD_METAPOOL_NAME)
@@ -95,6 +99,13 @@ function Pools(): ReactElement | null {
         poolData: usdPoolV2Data,
         userShareData: usdV2UserShareData,
         poolRoute: "/pools/usdv2",
+      }
+    } else if (poolName === STABLECOIN_CROSS_POOL_NAME) {
+      return {
+        name: STABLECOIN_CROSS_POOL_NAME,
+        poolData: usdPoolV3Data,
+        userShareData: usdV3UserShareData,
+        poolRoute: "/pools/usdv3",
       }
     } else if (poolName === SUSD_METAPOOL_NAME) {
       return {

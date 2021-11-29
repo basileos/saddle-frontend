@@ -39,6 +39,7 @@ export const SUSD_METAPOOL_NAME = "sUSD Metapool"
 export const TBTC_METAPOOL_NAME = "tBTC Metapool"
 export const WCUSD_METAPOOL_NAME = "wCUSD Metapool"
 export const ARB_USD_POOL_NAME = "arbUSD Pool"
+export const STABLECOIN_CROSS_POOL_NAME = "Stablecoin Cross Pool"
 export type PoolName =
   | typeof BTC_POOL_NAME
   | typeof BTC_POOL_V2_NAME
@@ -51,6 +52,7 @@ export type PoolName =
   | typeof TBTC_METAPOOL_NAME
   | typeof WCUSD_METAPOOL_NAME
   | typeof ARB_USD_POOL_NAME
+  | typeof STABLECOIN_CROSS_POOL_NAME
 
 export enum ChainId {
   MAINNET = 1,
@@ -60,6 +62,8 @@ export enum ChainId {
   // KOVAN = 42,
   HARDHAT = 31337,
   ARBITRUM = 42161,
+  CRONOS = 25,
+  POLYGON = 137,
 }
 export enum PoolTypes {
   BTC,
@@ -188,6 +192,11 @@ export const STABLECOIN_SWAP_V2_ADDRESSES = buildAddresses({
   [ChainId.HARDHAT]: "0xbf9fBFf01664500A33080Da5d437028b07DFcC55",
 })
 
+export const STABLECOIN_SWAP_V3_ADDRESSES = buildAddresses({
+  [ChainId.CRONOS]: "0x5F0C124F83602d32926aB75BD87C048fFb5f824c", // TODO deploy to cronos
+  [ChainId.POLYGON]: "0x5F0C124F83602d32926aB75BD87C048fFb5f824c",
+})
+
 export const BTC_SWAP_ADDRESSES = buildAddresses({
   [ChainId.MAINNET]: "0x4f6A43Ad7cba042606dECaCA730d4CE0A57ac62e",
   [ChainId.ROPSTEN]: "0x02ad8Da8cCa3764DFb62d749E51Cb3d4b35643ad",
@@ -240,6 +249,11 @@ export const STABLECOIN_SWAP_TOKEN_CONTRACT_ADDRESSES = buildAddresses({
 export const STABLECOIN_SWAP_V2_TOKEN_CONTRACT_ADDRESSES = buildAddresses({
   [ChainId.MAINNET]: "0x5f86558387293b6009d7896A61fcc86C17808D62",
   [ChainId.HARDHAT]: "0xC863F1F636fddce400E7515eCBDAbbEc4d1E0390",
+})
+
+export const STABLECOIN_SWAP_V3_TOKEN_CONTRACT_ADDRESSES = buildAddresses({
+  [ChainId.CRONOS]: "0xd005dc28e6b212Fff9e4b32F02cF26E1A5D5c05a", // TODO deploy
+  [ChainId.POLYGON]: "0xd005dc28e6b212Fff9e4b32F02cF26E1A5D5c05a",
 })
 
 export const WCUSD_SWAP_TOKEN_CONTRACT_ADDRESSES = buildAddresses({
@@ -369,6 +383,17 @@ export const STABLECOIN_SWAP_V2_TOKEN = new Token(
   true,
 )
 
+export const STABLECOIN_SWAP_V3_TOKEN = new Token(
+  STABLECOIN_SWAP_V3_TOKEN_CONTRACT_ADDRESSES,
+  18,
+  "crossUSD",
+  "crossusd",
+  "Cross DAI/USDC/USDT",
+  saddleLPTokenLogo,
+  false,
+  true,
+)
+
 export const WCUSD_SWAP_TOKEN = new Token(
   WCUSD_SWAP_TOKEN_CONTRACT_ADDRESSES,
   18,
@@ -456,6 +481,7 @@ const DAI_CONTRACT_ADDRESSES = buildAddresses({
   [ChainId.MAINNET]: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
   [ChainId.ROPSTEN]: "0x8C924e41d0624Ae6E7DB09fc93BBfB324c31BE0C",
   [ChainId.HARDHAT]: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+  [ChainId.POLYGON]: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
 })
 export const DAI = new Token(
   DAI_CONTRACT_ADDRESSES,
@@ -471,6 +497,7 @@ const USDC_CONTRACT_ADDRESSES = buildAddresses({
   [ChainId.ROPSTEN]: "0xA4fe4981f7550884E7E6224F0c78245DC145b2F2",
   [ChainId.HARDHAT]: "0x9A676e781A523b5d0C0e43731313A708CB607508",
   [ChainId.ARBITRUM]: "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+  [ChainId.POLYGON]: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
 })
 export const USDC = new Token(
   USDC_CONTRACT_ADDRESSES,
@@ -486,6 +513,7 @@ const USDT_CONTRACT_ADDRESSES = buildAddresses({
   [ChainId.ROPSTEN]: "0x0593d1b92e8Ba6bBC428923245891efF0311Fa15",
   [ChainId.HARDHAT]: "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1",
   [ChainId.ARBITRUM]: "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+  [ChainId.POLYGON]: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
 })
 export const USDT = new Token(
   USDT_CONTRACT_ADDRESSES,
@@ -743,126 +771,15 @@ export type PoolsMap = {
   [poolName: string]: Pool
 }
 export const POOLS_MAP: PoolsMap = {
-  [BTC_POOL_NAME]: {
-    name: BTC_POOL_NAME,
-    addresses: BTC_SWAP_ADDRESSES,
-    lpToken: BTC_SWAP_TOKEN,
-    poolTokens: BTC_POOL_TOKENS,
-    isSynthetic: true,
-    type: PoolTypes.BTC,
-    route: "btc",
-    isOutdated: true,
-    rewardPids: buildPids({}),
-  },
-  [BTC_POOL_V2_NAME]: {
-    name: BTC_POOL_V2_NAME,
-    addresses: BTC_SWAP_V2_ADDRESSES,
-    lpToken: BTC_SWAP_V2_TOKEN,
-    poolTokens: BTC_POOL_V2_TOKENS,
-    isSynthetic: true,
-    type: PoolTypes.BTC,
-    route: "btcv2",
-    rewardPids: buildPids({ [ChainId.MAINNET]: 4, [ChainId.HARDHAT]: 4 }),
-  },
-  [STABLECOIN_POOL_NAME]: {
-    name: STABLECOIN_POOL_NAME,
-    addresses: STABLECOIN_SWAP_ADDRESSES,
-    lpToken: STABLECOIN_SWAP_TOKEN,
+  [STABLECOIN_CROSS_POOL_NAME]: {
+    name: STABLECOIN_CROSS_POOL_NAME,
+    addresses: STABLECOIN_SWAP_V3_ADDRESSES,
+    lpToken: STABLECOIN_SWAP_V3_TOKEN,
     poolTokens: STABLECOIN_POOL_TOKENS,
     isSynthetic: false,
     type: PoolTypes.USD,
-    migration: STABLECOIN_POOL_V2_NAME,
-    route: "usd",
-    rewardPids: buildPids({}),
-  },
-  [STABLECOIN_POOL_V2_NAME]: {
-    name: STABLECOIN_POOL_V2_NAME,
-    addresses: STABLECOIN_SWAP_V2_ADDRESSES,
-    lpToken: STABLECOIN_SWAP_V2_TOKEN,
-    poolTokens: STABLECOIN_POOL_TOKENS,
-    isSynthetic: false,
-    type: PoolTypes.USD,
-    route: "usdv2",
+    route: "usdv3",
     rewardPids: buildPids({ [ChainId.MAINNET]: 3, [ChainId.HARDHAT]: 3 }),
-  },
-  [VETH2_POOL_NAME]: {
-    name: VETH2_POOL_NAME,
-    addresses: VETH2_SWAP_ADDRESSES,
-    lpToken: VETH2_SWAP_TOKEN,
-    poolTokens: VETH2_POOL_TOKENS,
-    isSynthetic: false,
-    type: PoolTypes.ETH,
-    route: "veth2",
-    rewardPids: buildPids({}),
-  },
-  [ALETH_POOL_NAME]: {
-    name: ALETH_POOL_NAME,
-    addresses: ALETH_SWAP_ADDRESSES,
-    lpToken: ALETH_SWAP_TOKEN,
-    poolTokens: ALETH_POOL_TOKENS,
-    isSynthetic: true,
-    type: PoolTypes.ETH,
-    route: "aleth",
-    rewardPids: buildPids({ [ChainId.MAINNET]: 1, [ChainId.HARDHAT]: 1 }),
-  },
-  [D4_POOL_NAME]: {
-    name: D4_POOL_NAME,
-    addresses: D4_SWAP_ADDRESSES,
-    lpToken: D4_SWAP_TOKEN,
-    poolTokens: D4_POOL_TOKENS,
-    isSynthetic: false,
-    type: PoolTypes.USD,
-    route: "d4",
-    rewardPids: buildPids({ [ChainId.MAINNET]: 2, [ChainId.HARDHAT]: 2 }),
-  },
-  [ARB_USD_POOL_NAME]: {
-    name: ARB_USD_POOL_NAME,
-    addresses: ARB_USD_SWAP_ADDRESSES,
-    lpToken: ARB_USD_SWAP_TOKEN,
-    poolTokens: ARB_USD_POOL_TOKENS,
-    isSynthetic: false,
-    type: PoolTypes.USD,
-    route: "arbusd",
-    rewardPids: buildPids({ [ChainId.ARBITRUM]: 1 }),
-  },
-  [SUSD_METAPOOL_NAME]: {
-    name: SUSD_METAPOOL_NAME,
-    lpToken: SUSD_SWAP_TOKEN,
-    poolTokens: SUSD_POOL_TOKENS,
-    addresses: SUSD_META_SWAP_DEPOSIT_ADDRESSES,
-    isSynthetic: true,
-    type: PoolTypes.USD,
-    metaSwapAddresses: SUSD_META_SWAP_ADDRESSES,
-    underlyingPoolTokens: SUSD_UNDERLYING_POOL_TOKENS,
-    underlyingPool: STABLECOIN_POOL_V2_NAME,
-    route: "susd",
-    rewardPids: buildPids({}),
-  },
-  [TBTC_METAPOOL_NAME]: {
-    name: TBTC_METAPOOL_NAME,
-    lpToken: TBTC_SWAP_TOKEN,
-    poolTokens: TBTC_POOL_TOKENS,
-    addresses: TBTC_META_SWAP_DEPOSIT_ADDRESSES,
-    isSynthetic: true,
-    type: PoolTypes.BTC,
-    metaSwapAddresses: TBTC_META_SWAP_ADDRESSES,
-    underlyingPoolTokens: TBTC_UNDERLYING_POOL_TOKENS,
-    underlyingPool: BTC_POOL_V2_NAME,
-    route: "tbtc",
-    rewardPids: buildPids({}),
-  },
-  [WCUSD_METAPOOL_NAME]: {
-    name: WCUSD_METAPOOL_NAME,
-    lpToken: WCUSD_SWAP_TOKEN,
-    poolTokens: WCUSD_POOL_TOKENS,
-    addresses: WCUSD_META_SWAP_DEPOSIT_ADDRESSES,
-    isSynthetic: false,
-    type: PoolTypes.USD,
-    metaSwapAddresses: WCUSD_META_SWAP_ADDRESSES,
-    underlyingPoolTokens: WCUSD_UNDERLYING_POOL_TOKENS,
-    underlyingPool: STABLECOIN_POOL_V2_NAME,
-    route: "wcusd",
-    rewardPids: buildPids({}),
   },
 }
 export function isLegacySwapABIPool(poolName: string): boolean {

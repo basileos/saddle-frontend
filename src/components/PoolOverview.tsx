@@ -37,6 +37,7 @@ export default function PoolOverview({
   userShareData,
   onClickMigrate,
 }: Props): ReactElement | null {
+  console.log("PoolOverview", poolData, poolRoute, userShareData)
   const { t } = useTranslation()
   const { type: poolType, isOutdated } = POOLS_MAP[poolData.name]
   const formattedDecimals = poolType === PoolTypes.USD ? 2 : 4

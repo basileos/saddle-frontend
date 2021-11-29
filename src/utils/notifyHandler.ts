@@ -3,7 +3,7 @@ import { getEtherscanLink } from "../utils/getEtherscanLink"
 import i18next from "i18next"
 import { truncate } from "lodash"
 
-const notifyNetworks = new Set([1, 3, 4, 5, 42, 56, 100])
+const notifyNetworks = new Set([1, 3, 4, 5, 42, 56, 100, 137])
 const chainId = parseInt(process.env.REACT_APP_CHAIN_ID ?? "1")
 
 export const notify = Notify({

@@ -5,4 +5,6 @@ export const NETWORK_LABEL: Partial<Record<ChainId, string>> = {
   [ChainId.ARBITRUM]: "Arbitrum",
   [ChainId.ROPSTEN]: "Ropsten",
   [ChainId.HARDHAT]: "Hardhat 👷🏼‍♂️",
+  [ChainId.CRONOS]: "Cronos",
+  [ChainId.POLYGON]: "Polygon",
 }

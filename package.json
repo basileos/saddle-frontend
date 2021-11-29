@@ -1,6 +1,6 @@
 {
-  "name": "saddle-frontend",
-  "description": "The frontend for saddle.finance 🤠",
+  "name": "cross-frontend",
+  "description": "The frontend for cross.finance",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -79,14 +79,37 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ["https://arb1.arbitrum.io/rpc"],
     blockExplorerUrls: ["https://mainnet-arb-explorer.netlify.app"],
   },
+  [ChainId.CRONOS]: {
+    chainId: "0x25",
+    chainName: "Cronos",
+    nativeCurrency: {
+      name: "Cronos",
+      symbol: "CRO",
+      decimals: 18,
+    },
+    rpcUrls: ["https://rpc-cronos.crypto.org"],
+    blockExplorerUrls: ["https://cronos.crypto.org/explorer/"],
+  },
+  [ChainId.POLYGON]: {
+    chainId: "0x89",
+    chainName: "Polygon",
+    nativeCurrency: {
+      name: "MATIC",
+      symbol: "MATIC",
+      decimals: 18,
+    },
+    rpcUrls: ["https://rpc-mainnet.maticvigil.com/"],
+    blockExplorerUrls: ["https://polygonscan.com/"],
+  },
 }
 function NetworkSection(): ReactElement {
   const { t } = useTranslation()
   const { chainId: activeChainId, library, account } = useActiveWeb3React()
+  console.log(library)
   const [isNetworkVisible, setIsNetworkVisible] = useState(false)
   const networks = [
     ChainId.MAINNET,
-    ...(IS_L2_SUPPORTED ? [ChainId.ARBITRUM] : []),
+    ...(IS_L2_SUPPORTED ? [ChainId.CRONOS, ChainId.POLYGON] : []),
   ]
 
   return (

@@ -120,7 +120,8 @@ export function useApproveAndDeposit(
           infiniteApproval,
           gasPrice,
           {
-            onTransactionError: () => {
+            onTransactionError: (error) => {
+              console.error(error)
               throw new Error("Your transaction could not be completed")
             },
           },
@@ -176,6 +177,7 @@ export function useApproveAndDeposit(
         )
       } else {
         const swapFlashLoanContract = effectiveSwapContract as SwapFlashLoan
+        console.log("approveAndDeposit", txnAmounts, minToMint, txnDeadline)
         spendTransaction = await swapFlashLoanContract?.addLiquidity(
           txnAmounts,
           minToMint,
